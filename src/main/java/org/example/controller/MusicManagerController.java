@@ -35,11 +35,11 @@ public class MusicManagerController {
   private TableColumn<MyFile, String> formatCol;
 
   private ObservableList<MyFile> fileList;
-  MusicManager manager;
+  private final MusicManager manager;
 
   public MusicManagerController() {
     this.fileList = FXCollections.observableArrayList();
-    manager = new MusicManager();
+    this.manager = new MusicManager();
   }
 
   @FXML
