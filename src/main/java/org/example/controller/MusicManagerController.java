@@ -18,6 +18,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.TransferMode;
 import org.example.model.MyFile;
+import org.example.service.MusicManager;
 
 public class MusicManagerController {
 
@@ -34,14 +35,16 @@ public class MusicManagerController {
   private TableColumn<MyFile, String> formatCol;
 
   private ObservableList<MyFile> fileList;
+  MusicManager manager;
 
   public MusicManagerController() {
     this.fileList = FXCollections.observableArrayList();
+    manager = new MusicManager();
   }
 
   @FXML
   void abortChanges() {
-    // reset
+    manager.abortChanges(fileList);
   }
 
   @FXML
@@ -51,7 +54,7 @@ public class MusicManagerController {
 
   @FXML
   void credits() throws URISyntaxException, IOException {
-    Desktop.getDesktop().browse(new URI("https://github.com/lapa44"));
+    Desktop.getDesktop().browse(new URI("https://github.com/lapa44/MusicManager"));
   }
 
   @FXML
@@ -66,7 +69,7 @@ public class MusicManagerController {
 
   @FXML
   void randomizePrefixes() {
-    // music manager
+    manager.randomizePrefixes(fileList);
   }
 
   @FXML
