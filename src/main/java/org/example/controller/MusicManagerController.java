@@ -1,11 +1,9 @@
 package org.example.controller;
 
 import java.awt.Desktop;
-import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
 import java.util.List;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -17,8 +15,8 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.TransferMode;
-import javafx.stage.FileChooser;
 import org.example.model.MyFile;
+import org.example.service.FileHelper;
 import org.example.service.MusicManager;
 
 public class MusicManagerController {
@@ -37,10 +35,12 @@ public class MusicManagerController {
 
   private ObservableList<MyFile> fileList;
   private final MusicManager manager;
+  private final FileHelper fileHelper;
 
   public MusicManagerController() {
     this.fileList = FXCollections.observableArrayList();
     this.manager = new MusicManager();
+    this.fileHelper = new FileHelper();
   }
 
   @FXML
@@ -59,15 +59,21 @@ public class MusicManagerController {
   }
 
   @FXML
-  void executeChanges() {
-    // FileHelper change names
+  void executeChanges() throws IOException {
+    ObservableList<MyFile> newList = FXCollections.observableArrayList();
+    for (MyFile file : fileList) {
+      newList.add(fileHelper.renameFile(file));
+    }
+    fileList = newList;
+    musicTable.setItems(fileList);
   }
 
   @FXML
   void importFiles() {
-    FileChooser fileChooser = new FileChooser();
-    List<File> files = fileChooser.showOpenMultipleDialog(null);
-    fileList.addAll(createMyFiles(files));
+    List<MyFile> importedFiles = fileHelper.importMyFiles();
+    if (!importedFiles.isEmpty()) {
+      fileList.addAll(importedFiles);
+    }
   }
 
   @FXML
@@ -90,7 +96,7 @@ public class MusicManagerController {
     });
     musicTable.setOnDragDropped(dragEvent -> {
       dragEvent.getDragboard().getFiles();
-      fileList.addAll(createMyFiles(dragEvent.getDragboard().getFiles()));
+      fileList.addAll(fileHelper.createMyFilesFromFiles(dragEvent.getDragboard().getFiles()));
       dragEvent.setDropCompleted(true);
     });
 
@@ -105,15 +111,5 @@ public class MusicManagerController {
         fileList.removeAll(musicTable.getSelectionModel().getSelectedItems());
       }
     });
-
   }
-
-  public List<MyFile> createMyFiles(List<File> list) {
-    List<MyFile> myFiles = new ArrayList<>();
-    for (File file : list) {
-      myFiles.add(new MyFile(file.getAbsolutePath()));
-    }
-    return myFiles;
-  }
-
 }
