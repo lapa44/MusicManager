@@ -17,6 +17,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.TransferMode;
+import javafx.stage.FileChooser;
 import org.example.model.MyFile;
 import org.example.service.MusicManager;
 
@@ -60,6 +61,13 @@ public class MusicManagerController {
   @FXML
   void executeChanges() {
     // FileHelper change names
+  }
+
+  @FXML
+  void importFiles() {
+    FileChooser fileChooser = new FileChooser();
+    List<File> files = fileChooser.showOpenMultipleDialog(null);
+    fileList.addAll(createMyFiles(files));
   }
 
   @FXML

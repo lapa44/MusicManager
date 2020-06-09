@@ -1,6 +1,9 @@
 package org.example.service;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import java.util.Arrays;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -15,15 +18,16 @@ class MusicManagerTest {
   public void shouldRandomizePrefixes() {
     MusicManager manager = new MusicManager();
     ObservableList<MyFile> myFiles = FXCollections.observableArrayList(Arrays.asList(
-        new MyFile(TEST_RESOURCES_DIR + "file1.mp3"),
-        new MyFile(TEST_RESOURCES_DIR + "file2.mp3")
+        new MyFile(TEST_RESOURCES_DIR + "1.file1.mp3"),
+        new MyFile(TEST_RESOURCES_DIR + "2.file2.mp3"),
+        new MyFile(TEST_RESOURCES_DIR + "3.file3.mp3")
     ));
 
     ObservableList<MyFile> changedFiles = manager.randomizePrefixes(myFiles);
 
     assertNotNull(changedFiles);
     assertEquals(myFiles.size(), changedFiles.size());
-    assertFalse(verifyEqualityOfPrefixes(myFiles, changedFiles));
+    assertTrue(verifyInequalityOfPrefixes(changedFiles));
   }
 
   @Test
@@ -31,24 +35,29 @@ class MusicManagerTest {
     MusicManager manager = new MusicManager();
     ObservableList<MyFile> myFiles = FXCollections.observableArrayList(Arrays.asList(
         new MyFile(TEST_RESOURCES_DIR + "file1.mp3"),
-        new MyFile(TEST_RESOURCES_DIR + "file2.mp3")
+        new MyFile(TEST_RESOURCES_DIR + "file2.mp3"),
+        new MyFile(TEST_RESOURCES_DIR + "3.file3.mp3")
     ));
 
     ObservableList<MyFile> changedFiles = manager.randomizePrefixes(myFiles);
-    assertTrue(verifyEqualityOfPrefixes(myFiles, changedFiles));
+    assertTrue(verifyInequalityOfPrefixes(changedFiles));
     changedFiles = manager.abortChanges(changedFiles);
 
     assertNotNull(changedFiles);
     assertEquals(myFiles.size(), changedFiles.size());
-    assertTrue(verifyEqualityOfPrefixes(myFiles, changedFiles));
+    assertFalse(verifyInequalityOfPrefixes(changedFiles));
   }
 
-  private boolean verifyEqualityOfPrefixes(ObservableList<MyFile> list1, ObservableList<MyFile> list2) {
-    for (int i = 0; i < list1.size(); i++) {
-      if (list1.get(i).getNumber() != list2.get(i).getNumber()) {
-        return false;
+  private boolean verifyInequalityOfPrefixes(ObservableList<MyFile> files) {
+    String[] decodedName;
+    for (MyFile file : files) {
+      decodedName = file.getName().split("\\.");
+      if (decodedName.length > 2) {
+        if (file.getNumber() != Integer.parseInt(decodedName[0])) {
+          return true;
+        }
       }
     }
-    return true;
+    return false;
   }
 }
