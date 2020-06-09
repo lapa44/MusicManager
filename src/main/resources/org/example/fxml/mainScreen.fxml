@@ -21,6 +21,7 @@
                         <Button layoutX="19.0" layoutY="167.0" mnemonicParsing="false" onAction="#convertToMp3" text="Convert selected to mp3" />
                         <Button layoutX="15.0" layoutY="215.0" mnemonicParsing="false" onAction="#credits" text="Credits" />
                         <Button layoutX="23.0" layoutY="263.0" mnemonicParsing="false" onAction="#quit" text="Quit" />
+                        <Button layoutX="23.0" layoutY="302.0" mnemonicParsing="false" onAction="#importFiles" text="Import FIles" />
                      </children>
                   </AnchorPane>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">

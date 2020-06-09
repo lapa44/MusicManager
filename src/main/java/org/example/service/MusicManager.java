@@ -1,13 +1,24 @@
 package org.example.service;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import javafx.collections.ObservableList;
 import org.example.model.MyFile;
 
 public class MusicManager {
 
   public ObservableList<MyFile> randomizePrefixes(ObservableList<MyFile> files) {
-    return null;
+    List<Integer> numbersPool = new ArrayList<>();
+    for (int i = 1; i < files.size() + 1; i++) {
+      numbersPool.add(i);
+    }
+    Collections.shuffle(numbersPool);
+    for (int i = 0; i < files.size(); i++) {
+      files.get(i).setNumber(numbersPool.get(i));
+    }
+    return files;
   }
 
   public ObservableList<MyFile> abortChanges(ObservableList<MyFile> files) {
