@@ -89,6 +89,14 @@ public class MusicManagerController {
   @FXML
   public void initialize() {
     musicTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+    tableEventsConfig();
+    numberCol.setCellValueFactory(new PropertyValueFactory<>("number"));
+    nameCol.setCellValueFactory(new PropertyValueFactory<>("fileName"));
+    formatCol.setCellValueFactory(new PropertyValueFactory<>("format"));
+    musicTable.setItems(fileList);
+  }
+
+  private void tableEventsConfig() {
     musicTable.setOnDragOver(dragEvent -> {
       if (dragEvent.getDragboard().hasFiles()) {
         dragEvent.acceptTransferModes(TransferMode.LINK);
@@ -99,12 +107,6 @@ public class MusicManagerController {
       fileList.addAll(fileHelper.createMyFilesFromFiles(dragEvent.getDragboard().getFiles()));
       dragEvent.setDropCompleted(true);
     });
-
-    numberCol.setCellValueFactory(new PropertyValueFactory<>("number"));
-    nameCol.setCellValueFactory(new PropertyValueFactory<>("fileName"));
-    formatCol.setCellValueFactory(new PropertyValueFactory<>("format"));
-    musicTable.setItems(fileList);
-
     musicTable.setOnKeyPressed(keyEvent -> {
       if (keyEvent.getCode().equals(KeyCode.DELETE)
           && musicTable.getSelectionModel().getSelectedItems() != null) {
