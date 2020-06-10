@@ -10,20 +10,24 @@ public class MyFile extends File {
   private SimpleStringProperty fileName;
   private SimpleStringProperty format;
 
+  private final String NUMBER_REGEX = "^\\d+\\.";
+
 
   public MyFile(String pathname) {
     super(pathname);
-    String[] fullName = getName().split("\\.");
-    if (fullName.length > 2) {
-      this.number = new SimpleIntegerProperty(Integer.parseInt(fullName[0]));
-      this.fileName = new SimpleStringProperty(fullName[1]);
-      this.format = new SimpleStringProperty(fullName[2]);
+    String fullName = getName();
+    String[] splitFullName = fullName.split("\\.");
+
+    if (pathname.matches(NUMBER_REGEX)) {
+      this.number = new SimpleIntegerProperty(Integer.parseInt(splitFullName[0]));
+      this.fileName = new SimpleStringProperty(fullName.substring(splitFullName[0].length(),
+          fullName.length() - splitFullName[splitFullName.length - 1].length() - 1));
     } else {
       this.number = new SimpleIntegerProperty();
-      this.fileName = new SimpleStringProperty(fullName[0]);
-      this.format = new SimpleStringProperty(fullName[1]);
+      this.fileName = new SimpleStringProperty(fullName.substring(0,
+          fullName.length() - splitFullName[splitFullName.length - 1].length() - 1));
     }
-
+    this.format = new SimpleStringProperty(splitFullName[splitFullName.length - 1]);
   }
 
   public int getNumber() {

@@ -1,10 +1,13 @@
 package org.example.controller;
 
 import java.awt.Desktop;
+import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -36,6 +39,8 @@ public class MusicManagerController {
   private ObservableList<MyFile> fileList;
   private final MusicManager manager;
   private final FileHelper fileHelper;
+  private final List<String> acceptedFormats = Arrays.asList(
+      ".mp3", ".wav", ".aac", ".mp4", ".wmv", ".avi");
 
   public MusicManagerController() {
     this.fileList = FXCollections.observableArrayList();
@@ -72,7 +77,8 @@ public class MusicManagerController {
   void importFiles() {
     List<MyFile> importedFiles = fileHelper.importMyFiles();
     if (!importedFiles.isEmpty()) {
-      fileList.addAll(importedFiles);
+      fileList.addAll(importedFiles.stream()
+          .filter(this::doesFileNotExistInList).collect(Collectors.toList()));
     }
   }
 
@@ -103,8 +109,8 @@ public class MusicManagerController {
       }
     });
     musicTable.setOnDragDropped(dragEvent -> {
-      dragEvent.getDragboard().getFiles();
-      fileList.addAll(fileHelper.createMyFilesFromFiles(dragEvent.getDragboard().getFiles()));
+      fileList.addAll(fileHelper.createMyFilesFromFiles(
+          filterDroppedFiles(dragEvent.getDragboard().getFiles())));
       dragEvent.setDropCompleted(true);
     });
     musicTable.setOnKeyPressed(keyEvent -> {
@@ -114,4 +120,24 @@ public class MusicManagerController {
       }
     });
   }
+
+  private List<File> filterDroppedFiles(List<File> list) {
+    return list.stream().filter(this::isFileFormatValid)
+        .filter(this::doesFileNotExistInList)
+        .collect(Collectors.toList());
+  }
+
+  private boolean isFileFormatValid(File file) {
+    for (String format : acceptedFormats) {
+      if (file.getName().contains(format)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  private boolean doesFileNotExistInList(File file) {
+    return !fileList.contains(file);
+  }
+
 }

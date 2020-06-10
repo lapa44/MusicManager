@@ -8,6 +8,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.stage.FileChooser;
+import javafx.stage.FileChooser.ExtensionFilter;
 import org.example.model.MyFile;
 
 public class FileHelper {
@@ -22,6 +23,11 @@ public class FileHelper {
 
   public List<MyFile> importMyFiles() {
     FileChooser fileChooser = new FileChooser();
+    fileChooser.setTitle("Import files");
+    fileChooser.getExtensionFilters().addAll(
+        new ExtensionFilter("Audio files", "*.wav", "*.mp3", "*.aac"),
+        new ExtensionFilter("Video files", "*.mp4", "*.wmv", "*.avi", "*.webm")
+    );
     List<File> files = fileChooser.showOpenMultipleDialog(null);
     return createMyFilesFromFiles(files);
   }
