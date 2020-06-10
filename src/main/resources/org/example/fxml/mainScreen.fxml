@@ -15,13 +15,13 @@
               <items>
                 <AnchorPane minHeight="0.0" minWidth="100.0" prefHeight="160.0" prefWidth="150.0" SplitPane.resizableWithParent="false">
                      <children>
-                        <Button layoutX="15.0" layoutY="14.0" mnemonicParsing="false" onAction="#randomizePrefixes" text="Randomize prefixes" />
-                        <Button layoutX="19.0" layoutY="116.0" mnemonicParsing="false" onAction="#abortChanges" text="Abort changes" />
-                        <Button layoutX="14.0" layoutY="63.0" mnemonicParsing="false" onAction="#executeChanges" text="Execute changes" />
-                        <Button layoutX="19.0" layoutY="167.0" mnemonicParsing="false" onAction="#convertToMp3" text="Convert selected to mp3" />
-                        <Button layoutX="15.0" layoutY="215.0" mnemonicParsing="false" onAction="#credits" text="Credits" />
-                        <Button layoutX="23.0" layoutY="263.0" mnemonicParsing="false" onAction="#quit" text="Quit" />
-                        <Button layoutX="23.0" layoutY="302.0" mnemonicParsing="false" onAction="#importFiles" text="Import FIles" />
+                        <Button layoutX="15.0" layoutY="14.0" minWidth="150.0" mnemonicParsing="false" onAction="#randomizePrefixes" text="Randomize prefixes" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="50.0" />
+                        <Button layoutX="19.0" layoutY="116.0" minWidth="150.0" mnemonicParsing="false" onAction="#abortChanges" text="Abort changes" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="170.0" />
+                        <Button layoutX="14.0" layoutY="63.0" minWidth="150.0" mnemonicParsing="false" onAction="#executeChanges" text="Execute changes" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="110.0" />
+                        <Button layoutX="19.0" layoutY="167.0" minWidth="150.0" mnemonicParsing="false" onAction="#convertToMp3" prefHeight="25.0" prefWidth="150.0" text="Convert selected to mp3" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="230.0" />
+                        <Button layoutX="15.0" layoutY="215.0" minWidth="150.0" mnemonicParsing="false" onAction="#credits" text="Credits" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="350.0" />
+                        <Button layoutX="15.0" layoutY="520.0" minWidth="150.0" mnemonicParsing="false" onAction="#quit" text="Quit" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="410.0" />
+                        <Button layoutX="23.0" layoutY="302.0" minWidth="150.0" mnemonicParsing="false" onAction="#importFiles" text="Import FIles" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="290.0" />
                      </children>
                   </AnchorPane>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
