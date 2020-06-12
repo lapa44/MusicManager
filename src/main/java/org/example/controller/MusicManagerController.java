@@ -21,6 +21,8 @@ import javafx.scene.input.TransferMode;
 import org.example.model.MyFile;
 import org.example.service.FileHelper;
 import org.example.service.MusicManager;
+import org.example.service.VideoConverter;
+import ws.schild.jave.EncoderException;
 
 public class MusicManagerController {
 
@@ -39,6 +41,7 @@ public class MusicManagerController {
   private ObservableList<MyFile> fileList;
   private final MusicManager manager;
   private final FileHelper fileHelper;
+  private final VideoConverter videoConverter;
   private final List<String> acceptedFormats = Arrays.asList(
       ".mp3", ".wav", ".aac", ".mp4", ".wmv", ".avi");
 
@@ -46,6 +49,7 @@ public class MusicManagerController {
     this.fileList = FXCollections.observableArrayList();
     this.manager = new MusicManager();
     this.fileHelper = new FileHelper();
+    this.videoConverter =  new VideoConverter();
   }
 
   @FXML
@@ -54,8 +58,14 @@ public class MusicManagerController {
   }
 
   @FXML
-  void convertToMp3() {
-    // Converter
+  void convertToMp3() throws EncoderException {
+    List<MyFile> filesToConvert = musicTable.getSelectionModel().getSelectedItems()
+        .filtered(myFile -> !myFile.getFormat().equals("mp3"));
+    if (!filesToConvert.isEmpty()) {
+      List<MyFile> convertedFiles = videoConverter.convertSelectedToMp3s(filesToConvert);
+      fileList.removeAll(filesToConvert);
+      fileList.addAll(convertedFiles);
+    }
   }
 
   @FXML
