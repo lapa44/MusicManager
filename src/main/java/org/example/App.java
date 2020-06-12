@@ -15,6 +15,7 @@ public class App extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         scene = new Scene(loadFXML("mainScreen"));
+        scene.getStylesheets().add(App.class.getResource("css/basicStyle.css").toExternalForm());
         stage.setTitle("Music Manager");
         stage.setScene(scene);
         stage.setResizable(false);
