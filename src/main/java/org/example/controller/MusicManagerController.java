@@ -17,6 +17,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.TransferMode;
 import org.example.model.MyFile;
 import org.example.service.FileHelper;
@@ -127,6 +128,11 @@ public class MusicManagerController {
       if (keyEvent.getCode().equals(KeyCode.DELETE)
           && musicTable.getSelectionModel().getSelectedItems() != null) {
         fileList.removeAll(musicTable.getSelectionModel().getSelectedItems());
+      }
+    });
+    musicTable.setOnMouseClicked(mouseEvent -> {
+      if (mouseEvent.getButton().equals(MouseButton.SECONDARY)) {
+        musicTable.getSelectionModel().clearSelection();
       }
     });
   }
