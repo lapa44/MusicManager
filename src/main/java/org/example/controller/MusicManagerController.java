@@ -129,7 +129,7 @@ public class MusicManagerController {
   @FXML
   void randomizePrefixes() {
     manager.randomizePrefixes(fileList);
-    logger.info("Successfully randomized prefixes.");
+    logger.info("Successfully randomized " + fileList.size() + " prefixes.");
   }
 
   @FXML

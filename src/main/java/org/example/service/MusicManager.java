@@ -24,13 +24,24 @@ public class MusicManager {
   public ObservableList<MyFile> abortChanges(ObservableList<MyFile> files) {
     for (MyFile file : files) {
       String[] decodedName = decodeName(file);
-      if (decodedName.length > 2) {
+      if (decodedName[0].matches("^\\d+\\.")) {
         file.setNumber(Integer.parseInt(decodedName[0]));
-        file.setFileName(decodedName[1]);
+        file.setFileName(file.getName().substring(decodedName[0].length(),
+            file.getName().length() - decodedName[decodedName.length - 1].length() - 1));
       } else {
         file.setNumber(0);
-        file.setFileName(decodedName[0]);
+        file.setFileName(file.getName().substring(0,
+            file.getName().length() - decodedName[decodedName.length - 1].length() - 1));
       }
+
+
+//      if (decodedName.length > 2) {
+//        file.setNumber(Integer.parseInt(decodedName[0]));
+//        file.setFileName(decodedName[1]);
+//      } else {
+//        file.setNumber(0);
+//        file.setFileName(decodedName[0]);
+//      }
     }
     return files;
   }
