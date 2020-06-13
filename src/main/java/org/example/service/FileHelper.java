@@ -29,7 +29,11 @@ public class FileHelper {
         new ExtensionFilter("Video files", "*.mp4", "*.wmv", "*.avi", "*.webm")
     );
     List<File> files = fileChooser.showOpenMultipleDialog(null);
-    return createMyFilesFromFiles(files);
+    if (files != null) {
+      return createMyFilesFromFiles(files);
+    } else {
+      return new ArrayList<>();
+    }
   }
 
   public MyFile renameFile(MyFile file) throws IOException {
