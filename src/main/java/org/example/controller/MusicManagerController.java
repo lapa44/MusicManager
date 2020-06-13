@@ -23,6 +23,8 @@ import org.example.model.MyFile;
 import org.example.service.FileHelper;
 import org.example.service.MusicManager;
 import org.example.service.VideoConverter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ws.schild.jave.EncoderException;
 
 public class MusicManagerController {
@@ -39,6 +41,7 @@ public class MusicManagerController {
   @FXML
   private TableColumn<MyFile, String> formatCol;
 
+  private final Logger logger;
   private ObservableList<MyFile> fileList;
   private final MusicManager manager;
   private final FileHelper fileHelper;
@@ -47,6 +50,7 @@ public class MusicManagerController {
       ".mp3", ".wav", ".aac", ".mp4", ".wmv", ".avi");
 
   public MusicManagerController() {
+    this.logger = LoggerFactory.getLogger(MusicManagerController.class);
     this.fileList = FXCollections.observableArrayList();
     this.manager = new MusicManager();
     this.fileHelper = new FileHelper();
@@ -153,7 +157,7 @@ public class MusicManagerController {
   }
 
   private boolean doesFileNotExistInList(File file) {
-    return !fileList.contains(file);
+    return fileList.stream().noneMatch(myFile -> myFile.getAbsolutePath().equals(file.getAbsolutePath()));
   }
 
 }
