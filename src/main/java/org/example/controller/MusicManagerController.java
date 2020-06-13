@@ -60,32 +60,52 @@ public class MusicManagerController {
   @FXML
   void abortChanges() {
     manager.abortChanges(fileList);
+    logger.info("Reverted randomized prefixes");
   }
 
   @FXML
-  void convertToMp3() throws EncoderException {
+  void convertToMp3() {
     List<MyFile> filesToConvert = musicTable.getSelectionModel().getSelectedItems()
         .filtered(myFile -> !myFile.getFormat().equals("mp3"));
     if (!filesToConvert.isEmpty()) {
-      List<MyFile> convertedFiles = videoConverter.convertSelectedToMp3s(filesToConvert);
-      fileList.removeAll(filesToConvert);
-      fileList.addAll(convertedFiles);
+      try {
+        logger.info("Trying to convert selected files.");
+        List<MyFile> convertedFiles = videoConverter.convertSelectedToMp3s(filesToConvert);
+        fileList.removeAll(filesToConvert);
+        fileList.addAll(convertedFiles);
+        logger.info("Successfully converted " + convertedFiles.size() + " files.");
+      }
+      catch (EncoderException exception) {
+        logger.error(String.valueOf(exception));
+      }
     }
   }
 
   @FXML
-  void credits() throws URISyntaxException, IOException {
-    Desktop.getDesktop().browse(new URI("https://github.com/lapa44/MusicManager"));
+  void credits() {
+    logger.info("Trying to open credits in browser.");
+    try {
+      Desktop.getDesktop().browse(new URI("https://github.com/lapa44/MusicManager"));
+    }
+    catch (IOException | URISyntaxException exception) {
+      logger.warn(String.valueOf(exception));
+    }
   }
 
   @FXML
-  void executeChanges() throws IOException {
+  void executeChanges() {
     ObservableList<MyFile> newList = FXCollections.observableArrayList();
+    logger.info("Trying to rename imported files.");
     for (MyFile file : fileList) {
-      newList.add(fileHelper.renameFile(file));
+      try {
+        newList.add(fileHelper.renameFile(file));
+      } catch (IOException exception) {
+        logger.error(String.valueOf(exception));
+      }
     }
     fileList = newList;
     musicTable.setItems(fileList);
+    logger.info("Finished executing changes.");
   }
 
   @FXML
@@ -94,21 +114,27 @@ public class MusicManagerController {
     if (!importedFiles.isEmpty()) {
       fileList.addAll(importedFiles.stream()
           .filter(this::doesFileNotExistInList).collect(Collectors.toList()));
+      logger.info("Successfully imported " + importedFiles.size() + " files.");
+    } else {
+      logger.info("No file were imported.");
     }
   }
 
   @FXML
   void quit() {
+    logger.info("Exiting application");
     Platform.exit();
   }
 
   @FXML
   void randomizePrefixes() {
     manager.randomizePrefixes(fileList);
+    logger.info("Successfully randomized prefixes.");
   }
 
   @FXML
   public void initialize() {
+    logger.info("Initializing file table.");
     musicTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
     tableEventsConfig();
     numberCol.setCellValueFactory(new PropertyValueFactory<>("number"));
@@ -126,12 +152,14 @@ public class MusicManagerController {
     musicTable.setOnDragDropped(dragEvent -> {
       fileList.addAll(fileHelper.createMyFilesFromFiles(
           filterDroppedFiles(dragEvent.getDragboard().getFiles())));
+      logger.info("Finished importing files by drag and drop.");
       dragEvent.setDropCompleted(true);
     });
     musicTable.setOnKeyPressed(keyEvent -> {
       if (keyEvent.getCode().equals(KeyCode.DELETE)
           && musicTable.getSelectionModel().getSelectedItems() != null) {
         fileList.removeAll(musicTable.getSelectionModel().getSelectedItems());
+        logger.info("Removed selected files.");
       }
     });
     musicTable.setOnMouseClicked(mouseEvent -> {
@@ -148,16 +176,18 @@ public class MusicManagerController {
   }
 
   private boolean isFileFormatValid(File file) {
+    logger.info("Validating file " + file.getName());
     for (String format : acceptedFormats) {
       if (file.getName().contains(format)) {
         return true;
       }
     }
+    logger.info("File " + file.getName() + " has invalid format.");
     return false;
   }
 
   private boolean doesFileNotExistInList(File file) {
+    logger.info("Checking for duplicates of " + file.getName());
     return fileList.stream().noneMatch(myFile -> myFile.getAbsolutePath().equals(file.getAbsolutePath()));
   }
-
 }
